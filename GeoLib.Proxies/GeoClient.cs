@@ -7,13 +7,17 @@ using System.Text;
 using System.Threading.Tasks;
 using GeoLib.Contracts;
 // By Industry convention
-// Call the proxy the same as the service contract that it correspondes to, but without the word "service", instead the word "client" and withoud the "I" for "Interface"
+// Call the proxy the same as the service contract that it corresponds to, but without the word "service", instead the word "client" and without the "I" for "Interface"
 // IGeoService becomes GeoClient
 
 namespace GeoLib.Proxies
 {
     public class GeoClient : ClientBase<IGeoService>, IGeoService
     {
+        public GeoClient(string endpointName) : base(endpointName)
+        {
+            
+        }
         public ZipCodeData GetZipInfo(string zip)
         {
             //return Channel.GetZipInfo(zip);

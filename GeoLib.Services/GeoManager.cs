@@ -17,28 +17,28 @@ namespace GeoLib.Services
 
         public GeoManager(IZipCodeRepository zipCodeRepository)
         {
-            _ZipCodeRepository = zipCodeRepository;
+            _zipCodeRepository = zipCodeRepository;
         }
 
         public GeoManager(IStateRepository stateRepository)
         {
-            _IStateRepository = stateRepository;
+            _stateRepository = stateRepository;
         }
 
         public GeoManager(IZipCodeRepository zipCodeRepository, IStateRepository stateRepository)
         {
-            _ZipCodeRepository = zipCodeRepository;
-            _IStateRepository = stateRepository;
+            _zipCodeRepository = zipCodeRepository;
+            _stateRepository = stateRepository;
         }
 
-        IZipCodeRepository _ZipCodeRepository = null;
-        IStateRepository _IStateRepository = null;
+        private readonly IZipCodeRepository _zipCodeRepository = null;
+        private readonly IStateRepository _stateRepository = null;
 
         public ZipCodeData GetZipInfo(string zip)
         {
             
             ZipCodeData zipCodeData = null;
-            IZipCodeRepository zipCodeRepository = _ZipCodeRepository ?? new ZipCodeRepository();
+            IZipCodeRepository zipCodeRepository = _zipCodeRepository ?? new ZipCodeRepository();
             ZipCode zipCodeEntity = zipCodeRepository.GetByZip(zip);
             if (zipCodeEntity != null)
             {
@@ -61,7 +61,7 @@ namespace GeoLib.Services
             return res;*/
 
             List<string> stateData = new List<string>();
-            IStateRepository stateRepository = _IStateRepository ?? new StateRepository();
+            IStateRepository stateRepository = _stateRepository ?? new StateRepository();
             IEnumerable<State> states = stateRepository.Get(primaryOnly);
             if(states != null)
             {
@@ -102,7 +102,7 @@ namespace GeoLib.Services
             */
 
             List<ZipCodeData> zipCodeData = new List<ZipCodeData>();
-            IZipCodeRepository zipCodeRepository = _ZipCodeRepository ?? new ZipCodeRepository();
+            IZipCodeRepository zipCodeRepository = _zipCodeRepository ?? new ZipCodeRepository();
 
             var zips = zipCodeRepository.GetByState(state);
             if (zips != null)
@@ -124,7 +124,7 @@ namespace GeoLib.Services
         public IEnumerable<ZipCodeData> GetZips(string zip, int range)
         {
             List<ZipCodeData> zipCodeData = new List<ZipCodeData>();
-            IZipCodeRepository zipCodeRepository = _ZipCodeRepository ?? new ZipCodeRepository();
+            IZipCodeRepository zipCodeRepository = _zipCodeRepository ?? new ZipCodeRepository();
 
             ZipCode zipEntity = zipCodeRepository.GetByZip(zip);
             IEnumerable<ZipCode> zips = zipCodeRepository.GetZipsForRange(zipEntity, range);

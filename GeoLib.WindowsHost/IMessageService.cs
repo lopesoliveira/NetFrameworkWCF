@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GeoLib.WindowsHost.Contracts
 {
-    [ServiceContract(Namespace = "http://github.com/lopesoliveira/NetFrameworkWCF")]
+    [ServiceContract]
     public interface IMessageService
     {
         [OperationContract]

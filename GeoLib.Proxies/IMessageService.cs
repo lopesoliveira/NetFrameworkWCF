@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace GeoLib.Client.Contracts
 {
-    [ServiceContract(Namespace = "http://github.com/lopesoliveira/NetFrameworkWCF")]
+    [ServiceContract]
     public interface IMessageService
     {
-        [OperationContract]
-        void ShowMessage(string message);
+        [OperationContract(Name="ShowMessage")]
+        void ShowMsg(string message);
     }
 }

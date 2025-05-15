@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
@@ -15,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GeoLib.Services;
+using GeoLib.WindowsHost.Services;
 
 namespace GeoLib.WindowsHost
 {
@@ -23,23 +25,31 @@ namespace GeoLib.WindowsHost
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow MainUI { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
             btnStart.IsEnabled = true;
             btnStop.IsEnabled = false;
 
-            this.Title = "UI Running on thread: " + Thread.CurrentThread.ManagedThreadId;
+            MainUI = this;
+
+            this.Title = "UI Running on thread: " + Thread.CurrentThread.ManagedThreadId +
+                         " | Process: " + Process.GetCurrentProcess().Id.ToString();
         }
 
         private ServiceHost _hostGeoManager = null;
+        private ServiceHost _hostMessageManager = null;
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             _hostGeoManager = new ServiceHost(typeof(GeoManager));
+            _hostMessageManager = new ServiceHost(typeof(MessageManager));
             try
             {
                 _hostGeoManager.Open();
+                _hostMessageManager.Open();
                 MessageBox.Show("The service host was started.");
             }
             catch (Exception ex)
@@ -56,6 +66,7 @@ namespace GeoLib.WindowsHost
             try
             {
                 _hostGeoManager.Close();
+                _hostMessageManager.Close();
                 MessageBox.Show("The service host has been closed!");
             }
             catch (Exception ex)
@@ -65,6 +76,14 @@ namespace GeoLib.WindowsHost
 
             btnStart.IsEnabled = true;
             btnStop.IsEnabled = false;
+        }
+
+        public void ShowMessage(string message)
+        {
+            int threadId = Thread.CurrentThread.ManagedThreadId;
+
+            lblMessage.Content = message + Environment.NewLine + $"( shown on thread {threadId}" +
+                                 " | Process: " + Process.GetCurrentProcess().Id + " )";
         }
     }
 }

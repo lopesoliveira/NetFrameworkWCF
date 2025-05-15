@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using GeoLib.Contracts;
@@ -15,14 +16,16 @@ namespace GeoLib.Proxies
     public class GeoClient : ClientBase<IGeoService>, IGeoService
     {
         public GeoClient(string endpointName) : base(endpointName)
-        {
-            
-        }
+        { }
+
+        public GeoClient(Binding binding, EndpointAddress address) : base(binding, address)
+        { }
+
         public ZipCodeData GetZipInfo(string zip)
         {
-            //return Channel.GetZipInfo(zip);
-            var x = Channel.GetZipInfo(zip);
-            return x;
+            return Channel.GetZipInfo(zip);
+            //var x = Channel.GetZipInfo(zip);
+            //return x;
         }
 
         public IEnumerable<string> GetStates(bool primaryOnly)
